@@ -12,6 +12,25 @@ class App extends React.Component {
 
         return <h1>{ this.state.counter }</h1>
     }
+
+    componentDidMount() {
+        this.id = setInterval(() => {
+            const {counter} = this.state
+            this.setState({counter: counter + 1}),
+            console.log('componentDidMount')
+        }, 5000)
+        
+    }
+    
+    componentDidUpdate() {
+        console.log('componentDidUpdate')
+    }
+
+    componentWillUnmount() {
+        clearInterval( this.id  )
+        console.log('componentWillUnmount');
+    }
+
 }
 
 root.render(<App/>);
