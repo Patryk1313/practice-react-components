@@ -6,32 +6,69 @@ const root = createRoot(document.querySelector('#root'));
 class Article extends React.Component {
     state = {
         comments: [],
+        content: ''
     }
-    
+
+    renderComments() {
+        const {comments} = this.state
+
+        return comments.map(name => {
+            return (
+                <li>
+                    { name }
+                </li>
+            );
+        });
+    }
+
+    inputChange = e => {
+        const {name, value} = e.target;
+        this.setState({[name]: value})
+    }
+
     render() {
         const {title, body} = this.props;
         return (
             <article>
                 <h1>{ title }</h1>
                 <p>{ body }</p>
-                <section>
+                <section onSubmit={this.submitHandler}>
                     <form>
                         <div>
                             <label>
-                                <textarea 
+                                <textarea
+                                    onChange={this.inputChange}
+                                    value={this.state.content}
+                                    name = 'content'
                                     style={{ "minWidth": "300px", "minHeight": "120px" }} 
-                                    name="content" 
                                 />
                             </label>
                         </div>
                         <div><input type="submit" value="dodaj komentarz" /></div>
                     </form>
                     <ul>
-                        {/* tutaj komentarze jako <li/>, ps. tak wygląda komentarz do kodu w JSX */}
+                        {this.renderComments()}
                     </ul>
                 </section>
             </article>
         )
+    }
+
+    submitHandler = e => {
+        e.preventDefault();
+        
+        const {comments, content} = this.state;
+
+        if(content === '') {
+            alert('Wpisz komentarz')
+            return
+        }
+
+        const commentsCopy = comments.slice();
+        commentsCopy.push(content);
+
+        this.setState({comments: commentsCopy});
+        this.setState({content: ''});
     }
 }
 
